@@ -1,5 +1,5 @@
 pub mod entities;
 pub mod ports;
 
-pub use entities::{Adjective, Noun, CoolName};
-pub use ports::{WordRepository, NameGenerator};
+pub use entities::{Adjective, CoolName, Noun};
+pub use ports::{NameGenerator, WordRepository};

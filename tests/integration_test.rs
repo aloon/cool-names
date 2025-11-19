@@ -1,9 +1,9 @@
+use axum::body::Body;
+use axum::http::{Request, StatusCode};
 use cool_names::adapters::create_router;
 use cool_names::application::NameGeneratorService;
 use cool_names::domain::ports::NameGenerator;
 use cool_names::infrastructure::FileWordRepository;
-use axum::body::Body;
-use axum::http::{Request, StatusCode};
 use std::path::Path;
 use std::sync::Arc;
 use tower::util::ServiceExt;
@@ -14,8 +14,7 @@ async fn test_full_integration_with_real_files() {
     let nouns_path = Path::new("nouns.txt");
 
     let repository = Arc::new(
-        FileWordRepository::new(adjectives_path, nouns_path)
-            .expect("Failed to load word files")
+        FileWordRepository::new(adjectives_path, nouns_path).expect("Failed to load word files"),
     );
 
     let name_generator = Arc::new(NameGeneratorService::new(repository.clone()));
@@ -43,8 +42,7 @@ async fn test_multiple_requests_return_different_names() {
     let nouns_path = Path::new("nouns.txt");
 
     let repository = Arc::new(
-        FileWordRepository::new(adjectives_path, nouns_path)
-            .expect("Failed to load word files")
+        FileWordRepository::new(adjectives_path, nouns_path).expect("Failed to load word files"),
     );
 
     let name_generator = Arc::new(NameGeneratorService::new(repository));
@@ -56,5 +54,8 @@ async fn test_multiple_requests_return_different_names() {
         names.insert(cool_name.to_string());
     }
 
-    assert!(names.len() > 1, "Should generate different names across multiple calls");
+    assert!(
+        names.len() > 1,
+        "Should generate different names across multiple calls"
+    );
 }

@@ -5,7 +5,7 @@ pub struct Adjective(String);
 
 impl Adjective {
     pub fn new(value: String) -> Self {
-        Self(value)
+        Self(value.to_lowercase())
     }
 
     pub fn as_str(&self) -> &str {
@@ -24,7 +24,7 @@ pub struct Noun(String);
 
 impl Noun {
     pub fn new(value: String) -> Self {
-        Self(value)
+        Self(value.to_lowercase())
     }
 
     pub fn as_str(&self) -> &str {
@@ -60,7 +60,7 @@ impl CoolName {
 
 impl fmt::Display for CoolName {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}-{}", self.adjective, self.noun)
+        write!(f, "{} {}", self.adjective, self.noun)
     }
 }
 

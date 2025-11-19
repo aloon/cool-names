@@ -1,5 +1,5 @@
-use crate::domain::{Adjective, Noun};
 use crate::domain::ports::{DomainError, WordRepository};
+use crate::domain::{Adjective, Noun};
 use rand::prelude::IndexedRandom;
 use std::fs;
 use std::path::Path;

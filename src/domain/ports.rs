@@ -1,4 +1,4 @@
-use super::entities::{Adjective, Noun, CoolName};
+use super::entities::{Adjective, CoolName, Noun};
 use thiserror::Error;
 
 #[derive(Error, Debug, Clone, PartialEq)]

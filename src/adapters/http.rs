@@ -1,8 +1,8 @@
 use crate::domain::ports::NameGenerator;
 use axum::{
     extract::State,
-    http::{StatusCode, header, HeaderMap},
-    response::{IntoResponse, Response, Html},
+    http::{header, HeaderMap, StatusCode},
+    response::{Html, IntoResponse, Response},
     routing::get,
     Json, Router,
 };
@@ -30,18 +30,11 @@ struct ErrorResponse {
     error: String,
 }
 
-fn accepts_json(headers: &HeaderMap) -> bool {
+fn accepts_html(headers: &HeaderMap) -> bool {
     headers
         .get(header::ACCEPT)
         .and_then(|value| value.to_str().ok())
-        .map(|accept| {
-            // Si el Accept header contiene text/html, priorizar HTML
-            if accept.contains("text/html") {
-                return false;
-            }
-            // Solo retornar JSON si explícitamente pide application/json
-            accept.contains("application/json")
-        })
+        .map(|accept| accept.contains("text/html"))
         .unwrap_or(false)
 }
 
@@ -146,40 +139,33 @@ fn create_html_response(cool_name: &str) -> Html<String> {
     ))
 }
 
-async fn generate_name_handler(
-    State(state): State<AppState>,
-    headers: HeaderMap,
-) -> Response {
+async fn generate_name_handler(State(state): State<AppState>, headers: HeaderMap) -> Response {
     match state.name_generator.generate() {
         Ok(cool_name) => {
             let name_str = cool_name.to_string();
 
-            if accepts_json(&headers) {
-                (
-                    StatusCode::OK,
-                    Json(CoolNameResponse { name: name_str }),
-                )
-                    .into_response()
-            } else {
+            if accepts_html(&headers) {
                 (StatusCode::OK, create_html_response(&name_str)).into_response()
+            } else {
+                (StatusCode::OK, Json(CoolNameResponse { name: name_str })).into_response()
             }
         }
         Err(e) => {
-            if accepts_json(&headers) {
-                (
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    Json(ErrorResponse {
-                        error: e.to_string(),
-                    }),
-                )
-                    .into_response()
-            } else {
+            if accepts_html(&headers) {
                 (
                     StatusCode::INTERNAL_SERVER_ERROR,
                     Html(format!(
                         "<html><body><h1>Error</h1><p>{}</p></body></html>",
                         e
                     )),
+                )
+                    .into_response()
+            } else {
+                (
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    Json(ErrorResponse {
+                        error: e.to_string(),
+                    }),
                 )
                     .into_response()
             }
@@ -198,8 +184,8 @@ pub fn create_router(name_generator: Arc<dyn NameGenerator>) -> Router {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::domain::{Adjective, CoolName, Noun};
     use crate::domain::ports::DomainError;
+    use crate::domain::{Adjective, CoolName, Noun};
     use axum::body::Body;
     use axum::http::{Request, StatusCode};
     use tower::util::ServiceExt;
@@ -225,14 +211,9 @@ mod tests {
 
         let app = create_router(mock_generator);
 
+        // Sin header Accept, debería retornar JSON por defecto
         let response = app
-            .oneshot(
-                Request::builder()
-                    .uri("/")
-                    .header("accept", "application/json")
-                    .body(Body::empty())
-                    .unwrap(),
-            )
+            .oneshot(Request::builder().uri("/").body(Body::empty()).unwrap())
             .await
             .unwrap();
 
@@ -258,8 +239,15 @@ mod tests {
 
         let app = create_router(mock_generator);
 
+        // Con header Accept: text/html, debería retornar HTML
         let response = app
-            .oneshot(Request::builder().uri("/").body(Body::empty()).unwrap())
+            .oneshot(
+                Request::builder()
+                    .uri("/")
+                    .header("accept", "text/html")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
             .await
             .unwrap();
 
@@ -283,14 +271,9 @@ mod tests {
 
         let app = create_router(mock_generator);
 
+        // Sin header Accept, debería retornar JSON por defecto
         let response = app
-            .oneshot(
-                Request::builder()
-                    .uri("/")
-                    .header("accept", "application/json")
-                    .body(Body::empty())
-                    .unwrap(),
-            )
+            .oneshot(Request::builder().uri("/").body(Body::empty()).unwrap())
             .await
             .unwrap();
 
@@ -312,8 +295,15 @@ mod tests {
 
         let app = create_router(mock_generator);
 
+        // Con header Accept: text/html, debería retornar HTML
         let response = app
-            .oneshot(Request::builder().uri("/").body(Body::empty()).unwrap())
+            .oneshot(
+                Request::builder()
+                    .uri("/")
+                    .header("accept", "text/html")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
             .await
             .unwrap();
 

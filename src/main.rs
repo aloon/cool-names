@@ -18,7 +18,8 @@ async fn main() {
         }
     };
 
-    println!("Loaded {} adjectives and {} nouns",
+    println!(
+        "Loaded {} adjectives and {} nouns",
         repository.adjectives_count(),
         repository.nouns_count()
     );
@@ -33,7 +34,5 @@ async fn main() {
     println!("Server running on http://127.0.0.1:3002");
     println!("Try: curl http://127.0.0.1:3002/");
 
-    axum::serve(listener, app)
-        .await
-        .expect("Server error");
+    axum::serve(listener, app).await.expect("Server error");
 }

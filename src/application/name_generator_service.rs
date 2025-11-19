@@ -1,5 +1,5 @@
-use crate::domain::{CoolName, NameGenerator};
 use crate::domain::ports::{DomainError, WordRepository};
+use crate::domain::{CoolName, NameGenerator};
 use std::sync::Arc;
 
 pub struct NameGeneratorService {
