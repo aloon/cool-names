@@ -26,11 +26,27 @@ cd cool-names
 
 ### Running the Application
 
+#### With Cargo
+
 ```bash
 cargo run
 ```
 
 The server will start on `http://127.0.0.1:3002`
+
+#### With Docker
+
+Build the image:
+```bash
+docker build -t cool-names .
+```
+
+Run the container:
+```bash
+docker run -p 3002:3002 cool-names
+```
+
+Access the application at `http://localhost:3002`
 
 ### Testing
 
