@@ -1,6 +1,6 @@
 use crate::domain::{Adjective, Noun};
 use crate::domain::ports::{DomainError, WordRepository};
-use rand::seq::SliceRandom;
+use rand::prelude::IndexedRandom;
 use std::fs;
 use std::path::Path;
 
@@ -42,14 +42,14 @@ impl FileWordRepository {
 impl WordRepository for FileWordRepository {
     fn get_random_adjective(&self) -> Result<Adjective, DomainError> {
         self.adjectives
-            .choose(&mut rand::thread_rng())
+            .choose(&mut rand::rng())
             .map(|word| Adjective::new(word.clone()))
             .ok_or(DomainError::NoAdjectivesAvailable)
     }
 
     fn get_random_noun(&self) -> Result<Noun, DomainError> {
         self.nouns
-            .choose(&mut rand::thread_rng())
+            .choose(&mut rand::rng())
             .map(|word| Noun::new(word.clone()))
             .ok_or(DomainError::NounsAvailable)
     }

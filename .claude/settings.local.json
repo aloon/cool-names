@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(cargo test)",
-      "Bash(cat /Users/alejandro.gonzalez/RustroverProjects/cool-names/README.md)"
+      "Bash(cat /Users/alejandro.gonzalez/RustroverProjects/cool-names/README.md)",
+      "Bash(cargo build)"
     ],
     "deny": [],
     "ask": []
