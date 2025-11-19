@@ -1,0 +1,16 @@
+[package]
+name = "cool-names"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = "0.7"
+tokio = { version = "1", features = ["full"] }
+rand = "0.8"
+thiserror = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+tower = { version = "0.4", features = ["util"] }
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = "3.8"
