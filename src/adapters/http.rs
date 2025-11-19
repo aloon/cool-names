@@ -90,7 +90,6 @@ fn create_html_response(cool_name: &str) -> Html<String> {
             font-size: 2.5em;
             font-weight: bold;
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-            text-transform: capitalize;
             letter-spacing: 2px;
             word-break: break-word;
         }}

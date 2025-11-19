@@ -20,7 +20,7 @@ A Rust web service that generates random cool names by combining adjectives and 
 ### Installation
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/aloon/cool-names
 cd cool-names
 ```
 
@@ -70,23 +70,20 @@ You'll see a beautiful UI displaying a randomly generated name like "cosmic-drag
 Request JSON format using curl:
 
 ```bash
-curl -H "Accept: application/json" http://127.0.0.1:3002/
+curl http://127.0.0.1:3002/
 ```
 
 Response:
 ```json
 {
-  "name": "mighty-warrior"
+  "name": "mighty warrior"
 }
 ```
 
 ### Default (HTML)
 
-Without specifying the Accept header, you'll receive HTML:
+Specifying the Accept HTML header, you'll receive HTML:
 
-```bash
-curl http://127.0.0.1:3002/
-```
 
 ## Architecture
 
@@ -171,14 +168,14 @@ cargo test -- --nocapture
 
 ### Generated Names
 
-- cosmic-dragon
-- blazing-phoenix
-- mighty-warrior
-- quantum-wizard
-- celestial-titan
-- ancient-sentinel
-- electric-thunder
-- mystical-sage
+- cosmic dragon
+- blazing phoenix
+- mighty warrior
+- quantum wizard
+- celestial titan
+- ancient sentinel
+- electric thunder
+- mystical sage
 
 ## API Endpoints
 
