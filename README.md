@@ -1,14 +1,14 @@
 # Cool Names
 
-A Rust web service that generates random cool names by combining adjectives and nouns. Built with Axum using hexagonal architecture.
+A simple Rust web service that generates random cool names by combining adjectives and nouns.
 
 ## Features
 
 - **Random Name Generation**: Combines random adjectives with random nouns (52,719+ possible combinations)
 - **Content Negotiation**: Returns HTML or JSON based on the `Accept` header
 - **Beautiful UI**: Modern, responsive web interface with gradient design
-- **Hexagonal Architecture**: Clean separation of concerns with domain-driven design
-- **Comprehensive Testing**: Unit and integration tests across all layers
+- **Simple Architecture**: Clean, straightforward code structure
+- **Comprehensive Testing**: Unit and integration tests
 
 ## Quick Start
 
@@ -70,54 +70,45 @@ You'll see a beautiful UI displaying a randomly generated name like "cosmic-drag
 Request JSON format using curl:
 
 ```bash
-curl http://127.0.0.1:3002/
+curl -H "Accept: application/json" http://127.0.0.1:3002/
 ```
 
 Response:
 ```json
 {
-  "name": "mighty warrior"
+  "name": "mighty-warrior"
 }
 ```
 
 ### Default (HTML)
 
-Specifying the Accept HTML header, you'll receive HTML:
+Without specifying the Accept header (or with `Accept: text/html`), you'll receive HTML:
 
+```bash
+curl http://127.0.0.1:3002/
+```
 
 ## Architecture
 
-This project follows **Hexagonal Architecture** (Ports and Adapters) for clean separation of concerns:
+This project uses a simple, straightforward architecture:
 
 ```
 src/
-├── domain/           # Business logic (entities and ports)
-│   ├── entities.rs   # Adjective, Noun, CoolName
-│   └── ports.rs      # WordRepository, NameGenerator traits
-├── application/      # Use cases
-│   └── name_generator_service.rs
-├── infrastructure/   # External implementations
-│   └── file_word_repository.rs
-├── adapters/         # External interfaces
-│   └── http.rs       # Axum HTTP adapter
-├── lib.rs
-└── main.rs           # Application entry point
+├── lib.rs    # Core logic: NameGenerator, word loading
+└── main.rs   # Web server: Axum routes and handlers
 ```
 
-### Layers
+### Components
 
-1. **Domain Layer**: Core business logic, no external dependencies
-   - Entities: `Adjective`, `Noun`, `CoolName`
-   - Ports: Trait definitions for repositories and services
+1. **NameGenerator** (`lib.rs`): Core business logic
+   - Loads adjectives and nouns from text files
+   - Generates random name combinations
+   - Handles errors gracefully
 
-2. **Application Layer**: Use cases and business workflows
-   - `NameGeneratorService`: Orchestrates name generation
-
-3. **Infrastructure Layer**: Technical implementations
-   - `FileWordRepository`: Reads and caches words from text files
-
-4. **Adapters Layer**: External interfaces
-   - HTTP adapter with Axum for REST API
+2. **Web Server** (`main.rs`): HTTP interface
+   - Axum-based REST API
+   - Content negotiation (HTML/JSON)
+   - Beautiful HTML UI with CSS
 
 ## Configuration
 
@@ -139,20 +130,20 @@ let listener = tokio::net::TcpListener::bind("127.0.0.1:3002")
 
 ## Dependencies
 
-- **axum** (0.7): Modern web framework
+- **axum** (0.8): Modern web framework
 - **tokio** (1.x): Async runtime
-- **rand** (0.8): Random number generation
-- **thiserror** (1.0): Error handling
+- **rand** (0.9): Random number generation
+- **thiserror** (2.0): Error handling
 - **serde** (1.0): Serialization/deserialization
-- **tower** (0.4): Middleware and utilities
+- **tower** (0.5): Middleware and utilities
 
 ## Testing
 
 The project includes comprehensive tests:
 
-- **Unit Tests**: 13 tests covering all business logic
-- **Integration Tests**: 2 tests validating end-to-end functionality
-- **Coverage**: Domain, application, infrastructure, and adapter layers
+- **Unit Tests**: Tests for word loading, generation logic
+- **Integration Tests**: End-to-end functionality tests
+- **All tests**: 6 tests covering the full stack
 
 Run tests with:
 ```bash
@@ -166,16 +157,16 @@ cargo test -- --nocapture
 
 ## Examples
 
-### Generated Names
+### Generated Names (all lowercase)
 
-- cosmic dragon
-- blazing phoenix
-- mighty warrior
-- quantum wizard
-- celestial titan
-- ancient sentinel
-- electric thunder
-- mystical sage
+- cosmic-dragon
+- blazing-phoenix
+- mighty-warrior
+- quantum-wizard
+- celestial-titan
+- ancient-sentinel
+- electric-thunder
+- mystical-sage
 
 ## API Endpoints
 
@@ -207,11 +198,11 @@ Generates a random cool name.
 
 ### Project Structure
 
-The codebase follows Rust best practices:
-- Each module has comprehensive tests
-- Clear separation between layers
-- Dependency injection through traits
-- No circular dependencies
+The codebase is intentionally simple:
+- `lib.rs`: Core name generation logic
+- `main.rs`: Web server and HTTP handlers
+- `tests/`: Integration tests
+- Clean separation of concerns without over-engineering
 
 ### Adding More Words
 
