@@ -178,7 +178,7 @@ async fn main() {
         .route("/", get(generate_name))
         .with_state(state);
 
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:3002")
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3002")
         .await
         .expect("Failed to bind to port 3002");
 

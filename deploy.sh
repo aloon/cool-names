@@ -1,0 +1,1 @@
+rsync -av --exclude-from='.gitignore' ./ alex@nuc:~/home-server/cool-names/

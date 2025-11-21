@@ -1,15 +1,15 @@
 # Build stage
-FROM rust:1.70 as builder
+FROM rust:latest AS builder
 
 WORKDIR /usr/src/cool-names
 
 # Copy manifests
-COPY Cargo.toml Cargo.lock ./
+COPY Cargo.toml ./
 
 # Copy source code
 COPY src ./src
 
-# Build for release
+# Build for release (this will generate a new Cargo.lock compatible with the Rust version)
 RUN cargo build --release
 
 # Runtime stage
