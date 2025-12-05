@@ -22,3 +22,5 @@ target
 
 deploy.sh
 .git/
+.env
+

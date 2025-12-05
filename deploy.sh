@@ -1,1 +1,1 @@
-rsync -av --exclude-from='.gitignore' ./ alex@nuc:~/home-server/cool-names/
+docker buildx build  --platform linux/amd64,linux/arm64 -t registry.canca.eu/cool-names:latest  . --push

@@ -3,7 +3,18 @@
     "allow": [
       "Bash(cargo test)",
       "Bash(cat /Users/alejandro.gonzalez/RustroverProjects/cool-names/README.md)",
-      "Bash(cargo build)"
+      "Bash(cargo build)",
+      "Bash(curl --max-time 3 http://127.0.0.1:3002/)",
+      "Bash(curl --max-time 2 http://127.0.0.1:3002/)",
+      "Bash(curl --max-time 2 -H \"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\" http://127.0.0.1:3002/)",
+      "Bash(git stash pop)",
+      "Bash(curl http://127.0.0.1:3002/api/name)",
+      "Bash(curl -H \"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8\" -H \"User-Agent: Mozilla/5.0\" -v http://127.0.0.1:3002/)",
+      "Bash(curl -s -H \"Accept: text/html\" http://127.0.0.1:3002/)",
+      "Bash(lsof -ti :3002)",
+      "Bash(xargs kill -9)",
+      "Bash(curl -s http://127.0.0.1:3002/)",
+      "Bash(open http://127.0.0.1:3002/)"
     ],
     "deny": [],
     "ask": []

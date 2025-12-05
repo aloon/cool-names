@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cool Names - Terminal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Mono', 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #33ff33;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.15),
+                    rgba(0, 0, 0, 0.15) 1px,
+                    transparent 1px,
+                    transparent 2px
+                );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.5) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .terminal {
+            background: #000000;
+            border: 2px solid #333333;
+            border-radius: 4px;
+            padding: 0;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            position: relative;
+            z-index: 2;
+        }
+
+        .terminal-header {
+            background: #1a1a1a;
+            padding: 6px 12px;
+            border-bottom: 1px solid #333333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .terminal-title {
+            color: #999999;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .terminal-user {
+            color: #33ff33;
+            font-size: 13px;
+        }
+
+        .terminal-body {
+            padding: 30px;
+            min-height: 400px;
+        }
+
+
+        h1 {
+            color: #ffffff;
+            font-size: 2em;
+            margin: 20px 0;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .divider {
+            color: #666666;
+            margin: 15px 0;
+        }
+
+        .info-line {
+            color: #cccccc;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        .label {
+            color: #888888;
+        }
+
+        .value {
+            color: #33ff33;
+        }
+
+        .name-display {
+            background: #0a0a0a;
+            border: 1px solid #333333;
+            padding: 20px;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .name-display::before {
+            content: ">";
+            position: absolute;
+            left: 10px;
+            color: #00ff00;
+        }
+
+        .name-text {
+            color: #33ff33;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            padding-left: 20px;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 24px;
+            background: #33ff33;
+            margin-left: 5px;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .command-line {
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .command-prompt {
+            color: #00ff00;
+        }
+
+        .command-btn {
+            background: transparent;
+            color: #33ff33;
+            border: 1px solid #33ff33;
+            padding: 8px 20px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .command-btn:hover {
+            background: #33ff33;
+            color: #000000;
+        }
+
+        .command-btn:active {
+            transform: translateY(1px);
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <div class="terminal-header">
+            <span class="terminal-title">cool-names@localhost: ~</span>
+            <span class="terminal-user">user@terminal</span>
+        </div>
+        <div class="terminal-body">
+            <div class="divider">════════════════════════════════════════════════</div>
+
+            <h1>COOL NAME GENERATOR</h1>
+
+            <div class="divider">════════════════════════════════════════════════</div>
+
+            <div class="info-line">
+                <span class="label">Version:</span>
+                <span class="value">1.0.0</span>
+            </div>
+            <div class="info-line">
+                <span class="label">Status:</span>
+                <span class="value">RUNNING</span>
+            </div>
+
+            <div class="divider">────────────────────────────────────────────────</div>
+
+            <div class="name-display">
+                <div class="name-text" id="name">loading<span class="cursor"></span></div>
+            </div>
+
+            <div class="divider">────────────────────────────────────────────────</div>
+
+            <div class="command-line">
+                <span class="command-prompt">$</span>
+                <button class="command-btn" onclick="location.reload()">generate --new</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        fetch('/api/name')
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('name').innerHTML = data.name + '<span class="cursor"></span>';
+            })
+            .catch(e => {
+                document.getElementById('name').innerHTML = 'ERROR: ' + e.message + '<span class="cursor"></span>';
+            });
+    </script>
+</body>
+</html>

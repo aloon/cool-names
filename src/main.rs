@@ -39,8 +39,10 @@ fn create_html_response(name: &str) -> Html<String> {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cool Names</title>
+    <title>Cool Names - Terminal</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap');
+
         * {{
             margin: 0;
             padding: 0;
@@ -48,8 +50,9 @@ fn create_html_response(name: &str) -> Html<String> {
         }}
 
         body {{
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'IBM Plex Mono', 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #33ff33;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -57,74 +60,110 @@ fn create_html_response(name: &str) -> Html<String> {
             padding: 20px;
         }}
 
-        .container {{
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 60px 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        .terminal {{
+            background: #000000;
+            border: 2px solid #33ff33;
+            border-radius: 8px;
+            padding: 40px;
             max-width: 800px;
             width: 100%;
-            text-align: center;
+            box-shadow: 0 0 30px rgba(51, 255, 51, 0.3),
+                        inset 0 0 50px rgba(51, 255, 51, 0.05);
         }}
 
-        h1 {{
-            color: #667eea;
-            font-size: 3em;
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-weight: 700;
+        .terminal-header {{
+            color: #33ff33;
+            font-size: 1em;
+            margin-bottom: 30px;
+            opacity: 0.7;
+            letter-spacing: 1px;
+        }}
+
+        .prompt {{
+            color: #33ff33;
+            margin-bottom: 20px;
+        }}
+
+        .prompt::before {{
+            content: "$ ";
+            color: #00ff00;
+            font-weight: bold;
         }}
 
         .name-box {{
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px;
-            border-radius: 15px;
+            background: #0d1b0d;
+            color: #00ff00;
+            padding: 30px;
+            border: 1px solid #33ff33;
             font-size: 2.5em;
             font-weight: bold;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-            letter-spacing: 2px;
+            text-align: center;
+            letter-spacing: 3px;
             word-break: break-word;
+            text-shadow: 0 0 10px rgba(51, 255, 51, 0.5);
+            margin: 20px 0;
         }}
 
-        .refresh-btn {{
+        .command {{
             margin-top: 30px;
-            padding: 15px 40px;
-            font-size: 1.1em;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 50px;
+            padding: 12px 30px;
+            font-size: 1em;
+            background: transparent;
+            color: #33ff33;
+            border: 2px solid #33ff33;
             cursor: pointer;
+            font-family: 'IBM Plex Mono', monospace;
             font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }}
 
-        .refresh-btn:hover {{
-            background: #764ba2;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.4);
+        .command:hover {{
+            background: #33ff33;
+            color: #000000;
+            box-shadow: 0 0 20px rgba(51, 255, 51, 0.5);
+        }}
+
+        .cursor {{
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: #33ff33;
+            animation: blink 1s infinite;
+            margin-left: 5px;
+        }}
+
+        @keyframes blink {{
+            0%, 49% {{ opacity: 1; }}
+            50%, 100% {{ opacity: 0; }}
         }}
 
         @media (max-width: 600px) {{
-            h1 {{
-                font-size: 2em;
+            .terminal {{
+                padding: 20px;
             }}
 
             .name-box {{
                 font-size: 1.8em;
-                padding: 30px;
+                padding: 20px;
+            }}
+
+            .command {{
+                width: 100%;
             }}
         }}
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Cool Names</h1>
+    <div class="terminal">
+        <div class="terminal-header">[cool-names v0.1.0]</div>
+        <div class="prompt">generate_name --random</div>
         <div class="name-box">{}</div>
-        <button class="refresh-btn" onclick="location.reload()">Generate Another</button>
+        <div class="prompt">
+            <span class="cursor"></span>
+        </div>
+        <button class="command" onclick="location.reload()">[ Generate New ]</button>
     </div>
 </body>
 </html>"#,
@@ -176,6 +215,7 @@ async fn main() {
     let state = AppState { generator };
     let app = Router::new()
         .route("/", get(generate_name))
+        .route("/api/name", get(generate_name))
         .with_state(state);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3002")
