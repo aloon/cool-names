@@ -29,7 +29,7 @@ fn accepts_html(headers: &HeaderMap) -> bool {
         .get(header::ACCEPT)
         .and_then(|value| value.to_str().ok())
         .map(|accept| accept.contains("text/html"))
-        .unwrap_or(true) // Default to HTML
+        .unwrap_or(false) // Default to JSON
 }
 
 fn create_html_response(name: &str) -> Html<String> {
@@ -338,7 +338,6 @@ async fn main() {
     let state = AppState { generator };
     let app = Router::new()
         .route("/", get(generate_name))
-        .route("/api/name", get(generate_name))
         .with_state(state);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3002")

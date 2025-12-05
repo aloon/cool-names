@@ -14,7 +14,8 @@
       "Bash(lsof -ti :3002)",
       "Bash(xargs kill -9)",
       "Bash(curl -s http://127.0.0.1:3002/)",
-      "Bash(open http://127.0.0.1:3002/)"
+      "Bash(open http://127.0.0.1:3002/)",
+      "Bash(curl -s http://127.0.0.1:3002/api/name)"
     ],
     "deny": [],
     "ask": []
